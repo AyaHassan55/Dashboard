@@ -6,7 +6,7 @@ import { User } from "../../Website/Context/UserContext";
 export default function Products() {
     const [products, setProducts] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [productToDelete, setProductToDelete] = useState(null);
     const [runUseEffect, setRun] =useState(0);
     const context =useContext(User);
     const token = context.auth.token;
@@ -24,35 +24,35 @@ export default function Products() {
     }, [runUseEffect]);
 
     function confirmDelete(id) {
-        setUserToDelete(id);
+        setProductToDelete(id);
         setShowModal(true);
     }
 
-    async function deleteUser(){
+    async function deleteProduct(){
         try{
-            const res = await axios.delete(`http://127.0.0.1:8000/api/user/delete/${userToDelete}`,{
+            const res = await axios.delete(`http://127.0.0.1:8000/api/product/delete/${productToDelete}`,{
                 headers: {
                 
-                    Authorization: `Bearer`+token
+                    Authorization: `Bearer `+token
                 }
             });
             if(res.status === 200  || res.status === 204){
-                setProducts(products.filter((user) => user.id !== userToDelete));
+                setProducts(products.filter((user) => user.id !== productToDelete));
                 setShowModal(false);
-                setUserToDelete(null);
+                setProductToDelete(null);
                 setRun(prev => prev + 1);
             }
         }
         catch(err)
         {console.log(err);}
     }
-    const showProducts = products.map((user, index) => (
-    <tr key={user.id}>
+    const showProducts = products.map((product, index) => (
+    <tr key={product.id}>
         <td>{index + 1}</td>
-        <td>{user.name}</td>
-        <td>{user.email}</td>
+        <td>{product.title}</td>
+        <td>{product.description}</td>
         <td>
-            <Link to={`${user.id}`}>
+            <Link to={`${product.id}`}>
                 <i
                 
                 className="fa-solid fa-pen-to-square"
@@ -61,7 +61,7 @@ export default function Products() {
             
 
             <i
-                onClick={() => confirmDelete(user.id)}
+                onClick={() => confirmDelete(product.id)}
                 className="fa-solid fa-trash"
                 style={{ color: "red", fontSize: "20px", cursor: "pointer" }}></i>
         </td>
@@ -74,8 +74,8 @@ export default function Products() {
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Users</th>
-                        <th>Email</th>
+                        <th>Title</th>
+                        <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -87,9 +87,9 @@ export default function Products() {
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
-                        <h3>هل أنت متأكد من الحذف؟</h3>
+                        <h3>هل أنت متأكد من حذف هذا المنتج ؟</h3>
                         <div style={{ marginTop: "20px" }}>
-                            <button className="delete-button" onClick={deleteUser}>
+                            <button className="delete-button" onClick={deleteProduct}>
                                 احذف
                             </button>
                             <button className="cancel-button" onClick={() => setShowModal(false)}>
