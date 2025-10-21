@@ -1,0 +1,13 @@
+.login{
+    display:flex; 
+    height:80vh; 
+    justify-content:center;
+    align-items:center;
+    
+    /*  */
+    margin-top: 40px;
+}
+.login form{
+    width:400px;
+    box-shadow:0 2px 15px rgb(0 0 0 / 10%);
+}
